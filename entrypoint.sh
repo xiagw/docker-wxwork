@@ -4,16 +4,16 @@ set -eo pipefail
 
 [ -n "$DOWORK_DEBUG" ] && set -x
 
-function hello () {
+function hello() {
   VERSION=$(cat /VERSION)
   echo "[DoWork] 盒装企业微信 v$VERSION"
 }
 
-function disableUpgrade () {
-  echo "To be write" > /dev/null
+function disableUpgrade() {
+  echo "To be write" >/dev/null
 }
 
-function setupFontDpi () {
+function setupFontDpi() {
   #
   # Wine Screen Resolution (DPI Setting)
   #   https://wiki.winehq.org/Winecfg#Screen_Resolution_.28DPI_Setting.29
@@ -21,7 +21,7 @@ function setupFontDpi () {
   DELETE_KEYS=('HKEY_CURRENT_USER\Control Panel\Desktop' 'HKEY_CURRENT_USER\Software\Wine\Fonts')
 
   for key in "${DELETE_KEYS[@]}"; do
-    wine reg DELETE "$key" /v LogPixels /f > /dev/null 2>&1 || true
+    wine reg DELETE "$key" /v LogPixels /f >/dev/null 2>&1 || true
   done
 
   wine reg ADD \
@@ -30,13 +30,13 @@ function setupFontDpi () {
     /t REG_DWORD \
     /d "${DOWORK_DPI:-120}" \
     /f \
-    > /dev/null 2>&1
+    >/dev/null 2>&1
 }
 
 #
 # WeChat Work
 #
-function startWXWork () {
+function startWXWork() {
 
   hello
   disableUpgrade
@@ -49,7 +49,7 @@ function startWXWork () {
       unset WINEDEBUG
       wine 'C:\Program Files\WXWork\WXWork.exe'
     else
-      if ! wine 'C:\Program Files\WXWork\WXWork.exe' > /dev/null 2>&1; then
+      if ! wine 'C:\Program Files\WXWork\WXWork.exe' >/dev/null 2>&1; then
         echo "[DoWork] Found new version"
       fi
     fi
@@ -100,7 +100,7 @@ function startWXWork () {
   done
 }
 
-function setupUserGroup () {
+function setupUserGroup() {
   if [ -n "$AUDIO_GID" ]; then
     groupmod -o -g "$AUDIO_GID" audio
   fi
@@ -108,10 +108,10 @@ function setupUserGroup () {
     groupmod -o -g "$VIDEO_GID" video
   fi
   if [ "$GID" != "$(id -g user)" ]; then
-      groupmod -o -g "$GID" group
+    groupmod -o -g "$GID" group
   fi
   if [ "$UID" != "$(id -u user)" ]; then
-      usermod -o -u "$UID" user
+    usermod -o -u "$UID" user
   fi
 
   chown user:group \
@@ -119,9 +119,9 @@ function setupUserGroup () {
     '/home/user/WXWork'
 }
 
-function setupHostname () {
+function setupHostname() {
   export HOSTNAME=DoWork
-  echo "$HOSTNAME" > /etc/hostname
+  echo "$HOSTNAME" >/etc/hostname
 
   #
   # Change the hostname for the wine runtime
@@ -133,7 +133,7 @@ function setupHostname () {
 #
 # Main
 #
-function main () {
+function main() {
 
   if [ "$(id -u)" -ne '0' ]; then
     startWXWork

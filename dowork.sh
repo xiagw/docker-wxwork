@@ -10,7 +10,7 @@
 #
 set -eo pipefail
 
-function hello () {
+function hello() {
   cat <<'EOF'
 
        ____     __        __         _
@@ -43,7 +43,7 @@ function hello () {
 EOF
 }
 
-function pullUpdate () {
+function pullUpdate() {
   if [ -n "$DOWORK_SKIP_PULL" ]; then
     return
   fi
@@ -55,7 +55,7 @@ function pullUpdate () {
   echo '🚀 Pulling the latest docker image done.'
 }
 
-function main () {
+function main() {
 
   hello
   pullUpdate
@@ -99,11 +99,11 @@ function main () {
     \
     zixia/wxwork
 
-    echo
-    echo "📦 DoWork Exited with code [$?]"
-    echo
-    echo '🐞 Bug Report: https://github.com/huan/docker-wxwork/issues'
-    echo
+  echo
+  echo "📦 DoWork Exited with code [$?]"
+  echo
+  echo '🐞 Bug Report: https://github.com/huan/docker-wxwork/issues'
+  echo
 
 }
 
